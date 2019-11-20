@@ -15,7 +15,7 @@ jobs:
     - stage: build docker image and push to registry
       script:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -t kfs-test -f docker/Dockerfile .
+      - docker build -t kfs-test .
       - docker images
       - docker tag kfs-test $DOCKER_USERNAME/kfs-test
       - docker push $DOCKER_USERNAME/kfs-test
