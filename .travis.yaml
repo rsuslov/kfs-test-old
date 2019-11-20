@@ -1,0 +1,38 @@
+sudo: true
+dist: bionic
+
+services:
+  - docker
+
+#git:
+#  quiet: true
+
+script:
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests; fi'
+#  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests; fi'
+
+jobs:
+  include:
+    - stage: build docker image and push to registry
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t kfs-test -f docker/Dockerfile .
+      - docker images
+      - docker tag kfs-test $DOCKER_USERNAME/kfs-test
+      - docker push $DOCKER_USERNAME/kfs-test
+    - stage: run docker container and test kfs
+      script:
+      - docker run -it --privileged --name kfs-test --rm rsuslov/kfs-test /bin/bash -c "/workdir/kfs.sh"
+
+# blocklist
+#branches:
+#  except:
+#  - master
+
+# safelist
+branches:
+  only:
+  - master
+
+notifications:
+  slack: testteam-c246404:XmuGaN04PZBk7IyJfhVTKSlj
