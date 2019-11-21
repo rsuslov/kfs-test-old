@@ -10,9 +10,9 @@ services:
 
 stages:
 - name docker-build
-  if: ONLY_BUILD = true
+  if: env(ONLY_BUILD) = true
 - docker-run
-  if: ONLY_RUN = true
+  if: env(ONLY_RUN) = true
 
 #git:
 #  quiet: true
