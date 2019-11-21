@@ -27,7 +27,9 @@ jobs:
       - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
       - docker images
       - docker push $REPO
+  exclude:
     - stage: run docker container and test kfs
+      env: BUILD_ONLY=true
       script:
       - docker run -it --privileged --name kfs --rm $REPO /bin/bash -c "/workdir/kfs.sh"
 
