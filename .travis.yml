@@ -9,9 +9,9 @@ services:
   - docker
 
 stages:
-- name docker-build
+- name: docker-build
   if: env(ONLY_BUILD) = true
-- docker-run
+- name: docker-run
   if: env(ONLY_RUN) = true
 
 #git:
